@@ -1,0 +1,52 @@
+﻿@using DataBase_Web.Data.Models_Tablas;
+@model Contact
+
+@{
+    ViewData["Title"] = "Detalle contacto";
+
+}
+
+
+<h1 class="text-center">Detalle contacto</h1>
+
+<div class="row">
+    <div class="offset-12">
+        <div class="card border">
+            <div class="card-header bg-white">
+                <h3 class="text-black">Detalle Contacto</h3>
+            </div>
+            <div class="card-body">
+                
+
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    @Html.DisplayFor(c => c.Name)
+                        
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    @Html.DisplayFor(c => c.Email)
+      
+                </div>
+                <div class="form-group">
+                    <label asp-for="Phone" class="control-label"></label>
+                    @Html.DisplayFor(c => c.Phone)
+   
+                </div>
+                <div class="form-group">
+                    <label asp-for="Addres" class="control-label"></label>
+                    @Html.DisplayFor(c => c.Addres)
+                </div>
+                <div class="form-group">
+                    <a asp-action="Index" class="btn btn-success">Volver</a>
+                        
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>

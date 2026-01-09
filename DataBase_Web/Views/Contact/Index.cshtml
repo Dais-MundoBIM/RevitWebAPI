@@ -1,0 +1,117 @@
+﻿@using DataBase_Web.Data.Models_Tablas
+@model IEnumerable<Contact>
+
+
+
+@{
+    ViewData["Title"] = "Mundo BIM";
+}
+
+
+
+@section CSS{
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.5/css/dataTables.dataTables.css" />
+
+}
+
+
+
+
+<h1>Mundo BIM - Dais</h1>
+
+<div class="row">
+    <div class="offset-9 col-3 mb-3">
+        <a asp-controller="Contact" asp-action="Create" class="btn btn-primary">    
+            <i class="fa-solid fa-address-book"></i> Nuevo Contacto
+        </a>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="offset-12"> 
+        <div class="card border">   
+            <div class="card-header bg-white">   
+                <h3 class="text-black"> Usuarios</h3>
+            </div>
+
+            <div class="card-body">
+                @if (Model.Count() >0)
+                {
+                    <table id ="tbContact" class="table table-striped">
+                        <thead> 
+                            <tr>
+                                <th>@Html.DisplayNameFor(c => c.ID)</th>                  
+                                <th>@Html.DisplayNameFor(c => c.Name)</th>                  
+                                <th>@Html.DisplayNameFor(c => c.Email)</th>                    
+                                <th>@Html.DisplayNameFor(c => c.Phone)</th>
+                                <th>@Html.DisplayNameFor(c => c.Addres)</th>           
+                                <th>@Html.DisplayNameFor(c => c.Date_Create)</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody> 
+                            @foreach (var contact in Model)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(c => contact.ID)</td>
+                                    <td>@Html.DisplayFor(c => contact.Name)</td>
+                                    <td>@Html.DisplayFor(c => contact.Email)</td>
+                                    <td>@Html.DisplayFor(c => contact.Phone)</td>
+                                    <td>@Html.DisplayFor(c => contact.Addres)</td>
+                                    <td>@Html.DisplayFor(c => contact.Date_Create)</td>
+                                    <td>
+                                        <a class="btn btn-warning btn-sm" asp-controller="Contact" asp-action="Edit" asp-route-id="@contact.ID"> <i class="fa-sharp fa-solid fa-pencil" aria-hidden="true"></i>Edit</a>
+                                        <a class="btn btn-info btn-sm" asp-controller="Contact" asp-action="Detail" asp-route-id="@contact.ID"> <i class="fa-solid fa-eye" aria-hidden="true"></i>View</a>
+                                        <a class="btn btn-danger btn-sm" asp-controller="Contact" asp-action="Delete" asp-route-id="@contact.ID"> <i class="fa-solid fa-xmark" aria-hidden="true"></i>Delete</a>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+
+
+
+
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-info" role="alert"> 
+                        <p>No hay contactos disponibles. Haga click en el boton "Nuevo Contacto" y agrega informacion.</p>
+                    </div>
+                }
+
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+@section Scripts {
+
+    <script src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
+    <script>
+         let table = new DataTable('#tbContact', {
+            responsive: true
+        });</script>
+
+
+}
+
