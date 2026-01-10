@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataBase_Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContex))]
-    [Migration("20251215031225_Ajuste")]
-    partial class Ajuste
+    [Migration("20260110192607_First_migration")]
+    partial class First_migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,6 +55,35 @@ namespace DataBase_Web.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Contacts");
+                });
+
+            modelBuilder.Entity("DataBase_Web.Data.Models_Tablas.PConstruccion", b =>
+                {
+                    b.Property<string>("ElementGUID")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ElementID")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ElementName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FechaEjecutada")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FechaProgramada")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ElementGUID");
+
+                    b.ToTable("PConstruccions");
                 });
 #pragma warning restore 612, 618
         }
