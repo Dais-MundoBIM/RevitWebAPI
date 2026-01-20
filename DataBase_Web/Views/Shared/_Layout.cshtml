@@ -71,9 +71,43 @@
 
 
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
+    <div class="d-flex">
+        <aside class="bg-dark text-white p-3" style="width: 250px; min-height: calc(100vh - 56px);">
+            <h5 class="text-center mb-4"><i class="fa-solid fa-school"></i> Colegios</h5>
+            <div class="list-group list-group-flush shadow-sm">
+
+
+
+                <a asp-controller="VelascoAlvarado" asp-action="Velasco_Index" asp-route-id="A"
+                   class="list-group-item list-group-item-action bg-dark text-white border-secondary">
+                    <i class="fa-solid fa-building-columns me-2"></i> I.E Velasco Alvarado
+                </a>
+
+
+
+
+
+
+                <a asp-controller="ColegioB" asp-action="Detalles" asp-route-id="B"
+                   class="list-group-item list-group-item-action bg-dark text-white border-secondary">
+                    <i class="fa-solid fa-building-columns me-2"></i> Colegio B
+                </a>
+                <a asp-controller="Colegio" asp-action="Detalles" asp-route-id="C"
+                   class="list-group-item list-group-item-action bg-dark text-white border-secondary">
+                    <i class="fa-solid fa-building-columns me-2"></i> Colegio C
+                </a>
+            </div>
+        </aside>
+
+
+
+
+
+
+        <main role="main" class="flex-grow-1 p-4 bg-light">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
         </main>
     </div>
 

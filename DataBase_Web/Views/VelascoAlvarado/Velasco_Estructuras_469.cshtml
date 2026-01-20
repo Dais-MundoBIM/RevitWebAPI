@@ -1,0 +1,146 @@
+﻿@model IEnumerable<DataBase_Web.Data.Models_Tablas.PConstruccion>
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Avance Activo 469 - Estructuras";
+
+    // --- LÓGICA DE CÁLCULO DE PROGRESO ---
+    int totalElementos = Model.Count();
+
+    // Contamos elementos que NO dicen "Vacio" y no están nulos
+    int programados = Model.Count(x => !string.IsNullOrEmpty(x.FechaProgramada) && x.FechaProgramada != "Vacio");
+    int ejecutados = Model.Count(x => !string.IsNullOrEmpty(x.FechaEjecutada) && x.FechaEjecutada != "Vacio");
+
+    // Calculamos porcentajes (evitando división por cero)
+    double porcProgramado = totalElementos > 0 ? (double)programados / totalElementos * 100 : 0;
+    double porcEjecutado = totalElementos > 0 ? (double)ejecutados / totalElementos * 100 : 0;
+
+    // Convertimos a string con PUNTO decimal para CSS usando InvariantCulture
+    string strPorcProgramado = porcProgramado.ToString("F1", CultureInfo.InvariantCulture);
+    string strPorcEjecutado = porcEjecutado.ToString("F1", CultureInfo.InvariantCulture);
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="VelascoAlvarado" asp-action="VelascoIndex">Inicio</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="VelascoAlvarado" asp-action="Velasco_Contenedores">Especialidades</a></li>
+                    <li class="breadcrumb-item active">Activo 469</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold"><i class="fa-solid fa-trowel-bricks text-danger me-2"></i>Estructuras: Activo 469</h2>
+            <p class="text-muted">Control de avance basado en datos extraídos de Revit.</p>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4 border-0">
+        <div class="card-body p-4">
+            <h5 class="mb-4 text-secondary"><i class="fa-solid fa-chart-line me-2"></i>Estado de Información del Modelo</h5>
+
+            <div class="mb-4">
+                <div class="d-flex justify-content-between mb-1">
+                    <span><strong>Planificación</strong> (Parámetro 'Fecha programada' lleno)</span>
+                    <span class="badge bg-primary">@strPorcProgramado%</span>
+                </div>
+                <div class="progress" style="height: 25px; border-radius: 12px;">
+                    <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                         role="progressbar"
+                         style="width: @strPorcProgramado%">
+                        @programados de @totalElementos elementos
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="d-flex justify-content-between mb-1">
+                    <span><strong>Ejecución Real</strong> (Parámetro 'Fecha ejecutada' en Obra)</span>
+                    <span class="badge bg-success">@strPorcEjecutado%</span>
+                </div>
+                <div class="progress" style="height: 25px; border-radius: 12px;">
+                    <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"
+                         role="progressbar"
+                         style="width: @strPorcEjecutado%">
+                        @ejecutados de @totalElementos elementos
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Listado de Elementos del Activo</h5>
+            <span class="badge bg-dark">Total: @totalElementos</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 120px;">ID Revit</th>
+                        <th>Categoría</th>
+                        <th>Nombre del Elemento</th>
+                        <th>Prog. (Revit)</th>
+                        <th>Ejec. (Obra)</th>
+                        <th class="text-center">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        bool estaEjecutado = !string.IsNullOrEmpty(item.FechaEjecutada) && item.FechaEjecutada != "Vacio";
+                        <tr>
+                            <td><code class="text-primary fw-bold">@item.ElementID</code></td>
+                            <td>@item.Category</td>
+                            <td class="small text-truncate" style="max-width: 250px;">@item.ElementName</td>
+                            <td>
+                                <span class="@(item.FechaProgramada == "Vacio" ? "text-danger" : "text-dark")">
+                                    <i class="fa-regular fa-calendar-check me-1"></i> @item.FechaProgramada
+                                </span>
+                            </td>
+                            <td>
+                                <span class="@(item.FechaEjecutada == "Vacio" ? "text-muted" : "text-success fw-bold")">
+                                    <i class="fa-solid fa-hammer me-1"></i> @item.FechaEjecutada
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                @if (estaEjecutado)
+                                {
+                                    <span class="badge rounded-pill bg-success p-2">
+                                        <i class="fa-solid fa-check-double"></i> Ejecutado
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill bg-light text-dark border p-2">
+                                        <i class="fa-solid fa-clock"></i> Pendiente
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Efecto de elevación al pasar el mouse por la tabla */
+    .table-hover tbody tr:hover {
+        background-color: rgba(37, 140, 251, 0.05);
+        transition: 0.2s;
+    }
+
+    /* Bordes redondeados para las barras de progreso */
+    .progress {
+        background-color: #e9ecef;
+        overflow: hidden;
+    }
+
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+    }
+</style>
